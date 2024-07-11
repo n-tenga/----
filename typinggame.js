@@ -130,7 +130,7 @@ function handleInput() {
         inputDisplay.value = "none";
         inputDisplay.textContent = "";  // 入力された内容を削除
 
-        if (score >= 2) {
+        if (score >= 5) {
             endGame();
         }
         
@@ -165,6 +165,14 @@ customInput.addEventListener("blur", function() {
 
 // ゲーム終了時の処理
 function endGame() {
+    var currentScore = score;
+    var currentTime = time;
+    var currentBackspaceCount = backspaceCount;
+    var currentKeystrokeCount = keystrokeCount;
+
+    // スプレッドシートにデータを保存する
+    saveGameData(currentScore, currentTime, currentBackspaceCount, currentKeystrokeCount);
+    
     clearInterval(timer);
     isPlaying = false;
 
