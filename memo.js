@@ -8,6 +8,7 @@ const display_sentence = ["それも決まりなんだ。目を閉じちゃい�
 let score = 0;
 let time = 0;
 let backspaceCount = 0;
+let keystrokeCount = 0;
 let isPlaying = false;
 let timer;
 let usedIndices = [];
@@ -26,6 +27,7 @@ const lateInputDisplay = document.getElementById("lateInputDisplay");
 const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
 const backspaceDisplay = document.getElementById("backspaceCount");
+//const keystrokeDisplay = document.getElementById("keystrokeCount");
 const startButton = document.getElementById("startButton");
 const lateStartButton = document.getElementById("lateStartButton");
 const restartButton = document.getElementById("restartButton");
@@ -37,7 +39,9 @@ lateStartButton.addEventListener("click", () => startLateGame());
 lateStartButton.addEventListener("click", () => delayTime = lateModeDelay);
 restartButton.addEventListener("click", () => restartGame());
 customInput.addEventListener("input", handleInput);
-customInput.addEventListener("keydown", handleKeyDown);
+customInput.addEventListener("keydown", () => handleKeyDown());
+//customInput.addEventListener("keydown", () => keystrokeCount());
+
 
 // 初期化時に入力ボックスを非表示にする
 customInput.style.display = "none";
@@ -54,6 +58,7 @@ function startGame(delay = 0) {
         scoreDisplay.textContent = score;
         timeDisplay.textContent = time;
         backspaceDisplay.textContent = backspaceCount;
+        //keystrokeDisplay.textContent = keystrokeCount;
         customInput.value = "";
         customInput.style.display = "none"; // 入力ボックスを非表示
         inputDisplay.textContent = ""; // 入力表示エリアを初期化
@@ -69,7 +74,7 @@ function startGame(delay = 0) {
 
 // カウントダウンの処理
 function startCountdown() {
-    let countdown = 1;
+    let countdown = 5;
     wordDisplay.style.display = "block";
     rubyDisplay.style.display = "block";
     wordDisplay.textContent = `ゲーム開始まで: ${countdown}秒`;
@@ -147,6 +152,17 @@ function handleKeyDown(event) {
         backspaceDisplay.textContent = backspaceCount;
     }
 }
+
+// キーが押されたときの処理
+/*function keystrokeCount(event) {
+    totalCount++;
+    keystrokeDisplay.textContent = keystrokeCount;
+    //updateTotalCount();
+    if (isPlaying && event.key === "") {  // ゲーム中のみカウントする
+        backspaceCount++;
+        backspaceDisplay.textContent = backspaceCount;
+    }
+}*/
 
 // 入力ボックスがフォーカスを失ったときに再度フォーカスを設定する
 customInput.addEventListener("blur", function() {

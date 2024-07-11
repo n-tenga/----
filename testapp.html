@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Googleスプレッドシート送信フォーム</title>
+</head>
+<body>
+  <h1>数字を入力してください</h1>
+  <form id="numberForm">
+    <input type="number" id="numberInput" required>
+    <button type="submit">送信</button>
+  </form>
+  
+  <script>
+    document.getElementById('numberForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      var number = document.getElementById('numberInput').value;
+      var data = { number: number };
+      
+      fetch('https://script.google.com/a/macros/g.kumamoto-nct.ac.jp/s/AKfycby1TyYRpXepgVUyoBcdVvIffWKFXUPIsZWqyAOiSCIpE2ET9G3Bf96VXcTLsoXBpth7/exec', { // メモしたURLに置き換えてください
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(responseData => {
+        if (responseData.result === 'success') {
+          alert('送信成功!');
+        } else {
+          alert('送信失敗!');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('エラーが発生しました');
+      });
+    });
+  </script>
+</body>
+</html>
