@@ -4,16 +4,18 @@ const display_shortwords = ["一年の計は元旦にあり", "人事を尽く�
 
 const input_sentence = ["それもきまりなんだ。めをとじちゃいけない。めをとじても、ものごとはちっともよくならない。めをとじてなにかがきえるわけじゃないんだ。それどころか、つぎにめをあけたときにはものごとはもっとわるくなっている。わたしたちはそういうせかいにすんでいるんだよ、なかたさん。しっかりとめをあけるんだ。めをとじるのはよわむしのやることだ。げんじつからめをそらすのはひきょうもののやることだ。きみがめをとじ、みみをふさいでいるあいだにもときはきざまれているんだ。こつこつと","",""]
 const display_sentence = ["それも決まりなんだ。目を閉じちゃいけない。目を閉じても、ものごとはちっとも良くならない。目を閉じて何かが消えるわけじゃないんだ。それどころか、次に目を開けたときにはものごとはもっと悪くなっている。私たちはそういう世界に住んでいるんだよ、ナカタさん。しっかりと目を開けるんだ。目を閉じるのは弱虫のやることだ。現実から目をそらすのは卑怯もののやることだ。君が目を閉じ、耳をふさいでいるあいだにも時は刻まれているんだ。コツコツと","",""]
+
 // 初期化
 let score = 0;
 let time = 0;
 let backspaceCount = 0;
+let keystrokeCount = 0; // キーストロークのカウント用変数を追加
 let isPlaying = false;
 let timer;
 let usedIndices = [];
 let countdownTimer;
 let lateModeDelay = 1000; // Late Gameモードの遅延時間（ミリ秒）
-let delayTime = 0; 
+let delayTime = 0;
 
 // HTML要素への参照を取得
 const wordDisplay = document.getElementById("word");
@@ -26,6 +28,7 @@ const lateInputDisplay = document.getElementById("lateInputDisplay");
 const scoreDisplay = document.getElementById("score");
 const timeDisplay = document.getElementById("time");
 const backspaceDisplay = document.getElementById("backspaceCount");
+const keystrokeDisplay = document.getElementById("keystrokeCount"); // キーストロークの表示要素
 const startButton = document.getElementById("startButton");
 const lateStartButton = document.getElementById("lateStartButton");
 const restartButton = document.getElementById("restartButton");
@@ -50,10 +53,12 @@ function startGame(delay = 0) {
         score = 0;
         time = 0;
         backspaceCount = 0;
+        keystrokeCount = 0; // キーストロークのカウントをリセット
         usedIndices = [];
         scoreDisplay.textContent = score;
         timeDisplay.textContent = time;
         backspaceDisplay.textContent = backspaceCount;
+        keystrokeDisplay.textContent = keystrokeCount; // キーストロークの表示をリセット
         customInput.value = "";
         customInput.style.display = "none"; // 入力ボックスを非表示
         inputDisplay.textContent = ""; // 入力表示エリアを初期化
@@ -69,7 +74,7 @@ function startGame(delay = 0) {
 
 // カウントダウンの処理
 function startCountdown() {
-    let countdown = 1;
+    let countdown = 5;
     wordDisplay.style.display = "block";
     rubyDisplay.style.display = "block";
     wordDisplay.textContent = `ゲーム開始まで: ${countdown}秒`;
@@ -140,11 +145,16 @@ function handleInput() {
     setTimeout(inputWordDisplay, delayTime);
 }
 
-// バックスペースキーの処理
+// バックスペースキーの処理とキーストロークのカウント
 function handleKeyDown(event) {
-    if (isPlaying && event.key === "Backspace") {  // ゲーム中のみカウントする
-        backspaceCount++;
-        backspaceDisplay.textContent = backspaceCount;
+    if (isPlaying) {  // ゲーム中のみカウントする
+        keystrokeCount++;
+        keystrokeDisplay.textContent = keystrokeCount; // キーストロークの表示を更新
+
+        if (event.key === "Backspace") {
+            backspaceCount++;
+            backspaceDisplay.textContent = backspaceCount;
+        }
     }
 }
 
@@ -152,7 +162,6 @@ function handleKeyDown(event) {
 customInput.addEventListener("blur", function() {
     customInput.focus();
 });
-
 
 // ゲーム終了時の処理
 function endGame() {
@@ -170,14 +179,6 @@ function endGame() {
     inputDisplay.textContent = ""; // 入力表示エリアを初期化
     lateStartButton.style.display = "none";
     restartButton.style.display = "inline-block";
-
-    // タイムラグを軽減するため、要素の表示を非同期化
-    //setTimeout(() => {
-        //wordDisplay.style.display = "none"; // ゲーム終了時にことわざを非表示
-        //rubyDisplay.style.display = "none"; // ゲーム終了時に読み仮名を非表示
-        //resultDisplay.textContent = "終了！ご協力ありがとうございます！お疲れ様でした！";
-        //resultDisplay.style.display = "block";
-    //}, 10); // 適切な遅延時間を調整してください
 }
 
 // リスタートボタンの処理
@@ -185,9 +186,11 @@ function restartGame() {
     score = 0;
     time = 0;
     backspaceCount = 0;
+    keystrokeCount = 0; // キーストロークのカウントをリセット
     scoreDisplay.textContent = score;
     timeDisplay.textContent = time;
     backspaceDisplay.textContent = backspaceCount;
+    keystrokeDisplay.textContent = keystrokeCount; // キーストロークの表示をリセット
     customInput.value = "";
     startButton.style.display = "inline-block";
     lateStartButton.style.display = "inline-block";
