@@ -1,5 +1,5 @@
 // ゲームに使用することわざのリスト
-const input_shortwords = ["いちねんのけいはがんじつにあり", "じんじをつくしててんめいをまつ", "じじつはしょうせつよりもきなり", "やまたかきがゆえにとうとからず", "むりがとおればどうりがひっこむ", "きのうはひとのみきょうはわがみ", "おんなさんにんよればかしましい", "うしにひかれてぜんこうじまいり", "かわいさあまってにくさがひゃくばい", "あおはあいよりいでてあいよりあおし"];
+const input_shortwords = ["いちねんのけいはがんたんにあり", "じんじをつくしててんめいをまつ", "じじつはしょうせつよりもきなり", "やまたかきがゆえにとうとからず", "むりがとおればどうりがひっこむ", "きのうはひとのみきょうはわがみ", "おんなさんにんよればかしましい", "うしにひかれてぜんこうじまいり", "かわいさあまってにくさがひゃくばい", "あおはあいよりいでてあいよりあおし"];
 const display_shortwords = ["一年の計は元旦にあり", "人事を尽くして天命を待つ", "事実は小説よりも奇なり", "山高きが故に貴からず", "無理が通れば道理がひっこむ", "昨日は人の身今日は我が身", "女三人寄れば姦しい", "牛にひかれて善光寺参り", "可愛さ余って憎さが百倍", "青は藍より出でて藍より青し"];
 
 const input_sentence = ["それもきまりなんだ。めをとじちゃいけない。めをとじても、ものごとはちっともよくならない。めをとじてなにかがきえるわけじゃないんだ。それどころか、つぎにめをあけたときにはものごとはもっとわるくなっている。わたしたちはそういうせかいにすんでいるんだよ、なかたさん。しっかりとめをあけるんだ。めをとじるのはよわむしのやることだ。げんじつからめをそらすのはひきょうもののやることだ。きみがめをとじ、みみをふさいでいるあいだにもときはきざまれているんだ。こつこつと","",""]
@@ -130,8 +130,9 @@ function handleInput() {
         inputDisplay.value = "none";
         inputDisplay.textContent = "";  // 入力された内容を削除
 
-        if (score >= 5) {
-            endGame();
+        if (score >= 10) {
+            setTimeout(endGame(), delayTime);
+            //endGame();
         }
         
         if(inputDisplay.textContent === ""){
@@ -171,7 +172,7 @@ function endGame() {
     var currentKeystrokeCount = keystrokeCount;
 
     // スプレッドシートにデータを保存する
-    saveGameData(currentScore, currentTime, currentBackspaceCount, currentKeystrokeCount);
+    //saveGameData(currentScore, currentTime, currentBackspaceCount, currentKeystrokeCount);
     
     clearInterval(timer);
     isPlaying = false;
