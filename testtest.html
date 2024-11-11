@@ -17,6 +17,8 @@
       var number = document.getElementById('numberInput').value;
       var data = { number: number };
       
+      console.log('送信データ:', data); // デバッグ用ログ
+      
       fetch('https://script.google.com/a/macros/g.kumamoto-nct.ac.jp/s/AKfycbw5XLmpR__dbZwRG_Et-_m1Ho_-St-8mW0AGSG5kWwMXljbSFfBHRkvOAwuNPOBQXV4/exec', { // メモしたURLに置き換えてください
         method: 'POST',
         headers: {
@@ -24,19 +26,26 @@
         },
         body: JSON.stringify(data)
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(responseData => {
+        console.log('レスポンスデータ:', responseData); // デバッグ用ログ
         if (responseData.result === 'success') {
           alert('送信成功!');
         } else {
-          alert('送信失敗!');
+          alert('送信失敗: ' + responseData.message);
         }
       })
       .catch(error => {
-        console.error('Error:', error);
-        alert('エラーが発生しました');
+        console.error('フェッチエラー:', error); // 詳細なエラーログ
+        alert('エラーが発生しました: ' + error.message);
       });
     });
   </script>
 </body>
 </html>
+

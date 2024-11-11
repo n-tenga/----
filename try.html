@@ -24,3 +24,48 @@
     <script src="try.js"></script>
 </body>
 </html>
+
+
+// 入力の処理
+function handleInput() {
+const currentWordIndex = display_shortwords.indexOf(wordDisplay.textContent);
+const userInput = customInput.value.trim();
+if (userInput === input_shortwords[currentWordIndex]) {
+    score++;
+    scoreDisplay.textContent = score;
+    customInput.value = "";
+    inputDisplay.value = "none";
+    inputDisplay.textContent = "";  // 入力された内容を削除
+
+    if (score >= 2) {
+        endGame();
+    }
+    
+    if(inputDisplay.textContent === ""){
+    setTimeout(showWord(), delay);  // 次のことわざを表示
+    }
+}
+// 入力表示エリアに入力内容を反映
+function inputWordDisplay(){
+    inputDisplay.textContent = userInput
+}
+setTimeout(inputWordDisplay, delayTime);
+}
+
+// バックスペースキーの処理とキーストロークのカウント
+function handleKeyDown(event) {
+if (isPlaying) {  // ゲーム中のみカウントする
+    keystrokeCount++;
+    keystrokeDisplay.textContent = keystrokeCount; // キーストロークの表示を更新
+
+    if (event.key === "Backspace") {
+        backspaceCount++;
+        backspaceDisplay.textContent = backspaceCount;
+    }
+}
+}
+
+// 入力ボックスがフォーカスを失ったときに再度フォーカスを設定する
+customInput.addEventListener("blur", function() {
+customInput.focus();
+});
