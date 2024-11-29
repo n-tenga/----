@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タイピングゲーム</title>
+  <!-- Bootstrap CSSのインクルード -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="test.css">
+</head>
+
+<body>
+  <div class="container text-center mt-5">
+    <!-- ゲーム画面要素 -->
+    <h1 id="word" class="display-6"></h1>
+    <input type="text" id="customInput" class="form-control my-3" autocomplete="off">
+    
+     <!-- 表示用のテキストエリア -->
+    <div id="inputDisplay" style="white-space: pre; font-size: 50px;"></div>
+    <div id="lateInputDisplay"></div>
+    <div id="delayTimeDisplay"></div>
+
+    
+    <!--レイトモード-->
+    <!-- Late Gameモード用の表示領域 -->
+    <div id="inputDisplayLate" style="white-space: pre;"></div>
+    <button id="startButton" class="btn btn-primary btn-lg">Start</button>
+    <h2 class="mt-4">Time: <span id="time">0</span>s</h2>
+    <h2>Score: <span id="score">0</span></h2>
+    
+    <h2 id="result" class="mt-4" style="display: none;"></h2>
+  </div>
+
+  <!-- BootstrapとjQueryのインクルード -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="test.js"></script>
+</body>
+
+</html>
