@@ -159,6 +159,7 @@ function showWord() {
 let currentIndex = 0;
 
 // ランダムではなく順番通りにことわざを表示する
+/*
 function showWord() {
     // 次に表示するインデックスのことわざを取得
     if (currentIndex >= input_shortwords.length) {
@@ -181,6 +182,35 @@ function showWord() {
     // インデックスを進める
     currentIndex++;
 }
+*/
+
+
+function showWord() {
+    if (currentIndex >= input_shortwords.length) {
+        endGame();
+        return;
+    }
+
+    inputDisplay.textContent = "";
+
+    const currentWord = display_shortwords[currentIndex];
+    const currentRuby = input_shortwords[currentIndex];
+
+    wordDisplay.textContent = currentWord;
+    rubyDisplay.textContent = currentRuby;
+
+    // ワードが表示されたタイミングでスタートタイムとカウントを記録
+    wordTimes.push({
+        word: currentRuby,
+        startTime: Date.now(),
+        backspaceCount: 0,
+        keystrokeCount: 0
+    });
+
+    currentIndex++;
+}
+
+
 
 
 // 時間を更新する
@@ -333,6 +363,7 @@ function updateTime() {
 */
 
 // 入力の処理
+/*
 function handleInput() {
     const currentWordIndex = display_shortwords.indexOf(wordDisplay.textContent);
     const userInput = customInput.value.trim();
@@ -341,7 +372,7 @@ function handleInput() {
     const delay = delaytime[currentWordIndex];
 
     // 現在の遅延時間を画面に表示
-    delayTimeDisplay.textContent = `現在のディレイタイム: ${delay}ms`;
+    //delayTimeDisplay.textContent = `現在のディレイタイム: ${delay}ms`;
 
 
     // ユーザーの入力が正しい場合
@@ -359,7 +390,7 @@ function handleInput() {
         wordTimes.find(wt => wt.word === input_shortwords[currentWordIndex]).inputTime = inputTime;
 
         // 次のことわざを表示（遅延無しで表示）
-        if (score >= 45) {
+        if (score >= 2) {
             setTimeout(endGame, 0);  // ゲーム終了を即時に実行
         } else {
             // 入力が正しく完了した場合、遅延無しで次のことわざを表示
@@ -369,6 +400,47 @@ function handleInput() {
         }
     }
 
+    // ユーザーの入力を遅延して表示
+    delayedInputDisplay(userInput, delay);
+}
+*/
+
+function handleInput() {
+    const currentWordIndex = display_shortwords.indexOf(wordDisplay.textContent);
+    const userInput = customInput.value.trim();
+
+    // 遅延時間を取得
+    const delay = delaytime[currentWordIndex];
+
+    if (userInput === input_shortwords[currentWordIndex]) {
+        score++;
+        scoreDisplay.textContent = score;
+        customInput.value = "";
+        inputDisplay.textContent = "";
+
+        const wordStartTime = wordTimes[currentWordIndex].startTime;
+        const inputTime = (Date.now() - wordStartTime) / 1000;
+
+        // 入力完了時のデータを保存
+        wordTimes[currentWordIndex].delay = delay;
+        wordTimes[currentWordIndex].inputTime = inputTime;
+        wordTimes[currentWordIndex].backspaceCount = backspaceCount;
+        wordTimes[currentWordIndex].keystrokeCount = keystrokeCount;
+
+        backspaceCount = 0;
+        keystrokeCount = 0;
+
+        if (score >= 2) {
+            setTimeout(endGame, 0);  // ゲーム終了を即時に実行
+        } else {
+            // 入力が正しく完了した場合、遅延無しで次のことわざを表示
+            setTimeout(() => {
+                showWord();  // 次のことわざを表示
+            }, 0);  // 遅延を0に設定して即座に表示
+        }
+    }
+
+    //inputDisplay.textContent = userInput;
     // ユーザーの入力を遅延して表示
     delayedInputDisplay(userInput, delay);
 }
@@ -385,12 +457,10 @@ function delayedInputDisplay(userInput, delay) {
 
 
 // バックスペースキーの処理とキーストロークのカウント
+/*
 function handleKeyDown(event) {
     if (isPlaying) {  // ゲーム中のみカウントする
-        if (event.keyCode === 65) {
-            // イベントのデフォルト動作をキャンセルする
-            event.preventDefault();
-        }
+       
         keystrokeCount++;
         keystrokeDisplay.textContent = keystrokeCount; // キーストロークの表示を更新
 
@@ -400,6 +470,19 @@ function handleKeyDown(event) {
         }
     }
 }
+*/
+function handleKeyDown(event) {
+    if (isPlaying) {
+        keystrokeCount++;
+        keystrokeDisplay.textContent = keystrokeCount;
+
+        if (event.key === "Backspace") {
+            backspaceCount++;
+            backspaceDisplay.textContent = backspaceCount;
+        }
+    }
+}
+
 
 // ゲーム終了時の処理
 function endGame() {
@@ -427,12 +510,39 @@ function endGame() {
 }
 
 // CSVダウンロード用の関数
+/*
 function downloadCSV(score, time, backspaceCount, keystrokeCount, wordTimes) {
     const headers = ["Score", "Time(s)", "Backspace Count", "Keystroke Count", "Word", "Input Time(s)", "Delay Time(ms)"];
     let rows = [[score, (time / 1000).toFixed(2), backspaceCount, keystrokeCount]];  // ゲーム全体の結果
     wordTimes.forEach(wt => {
         rows.push([score, (time / 1000).toFixed(2), backspaceCount, keystrokeCount, wt.word, wt.inputTime ? wt.inputTime.toFixed(2) : '']);
     });
+
+    let csvContent = headers.join(",") + "\n";
+    rows.forEach(row => {
+        csvContent += row.join(",") + "\n";
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "game_results.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+    */
+function downloadCSV(score, time, backspaceCount, keystrokeCount, wordTimes) {
+    const headers = ["Word", "Input Time(s)", "Backspace Count", "Keystroke Count","Delay Time(ms)"];
+    let rows = wordTimes.map(wt => [
+        wt.word,
+        wt.inputTime ? wt.inputTime.toFixed(2) : '',
+        wt.backspaceCount,
+        wt.keystrokeCount,
+        wt.delay
+    ]);
 
     let csvContent = headers.join(",") + "\n";
     rows.forEach(row => {
