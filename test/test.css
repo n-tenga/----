@@ -1,0 +1,47 @@
+/* 必要に応じてカスタムスタイルを追加します */
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.ruby {
+    font-size: 24px;
+    color: gray;
+}
+
+#customInputContainer {
+    display: flex;
+    justify-content: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 20px;
+    min-height: 50px;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.custom-input:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+#customInput {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
+#inputDisplay {
+    font-size: 30px; /* フォントサイズを適切なサイズに設定 */
+    /* 他のスタイルプロパティも必要に応じて追加 */
+}
